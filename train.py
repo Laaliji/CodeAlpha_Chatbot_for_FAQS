@@ -1,7 +1,6 @@
 import nltk
 from model import NeuralNet
 import json
-from nltk.stem.porter import PorterStemmer
 import numpy as np
 import torch
 import torch.nn as nn
@@ -16,7 +15,6 @@ def ensure_nltk_resources():
         except LookupError:
             nltk.download(resource.split('/')[-1])  # Downloads the resource
 
-# Ensure necessary NLTK resources are available
 ensure_nltk_resources()
 
 # Load intents
@@ -65,7 +63,7 @@ class ChatDataset(Dataset):
 
 
 if __name__ == '__main__':
-    # Hyperparameters
+    #Hyperparameters
     batch_size = 8
     hidden_size = 8
     output_size = len(tags)
@@ -101,3 +99,18 @@ if __name__ == '__main__':
             print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}')
 
     print(f'Final Loss: {loss.item():.4f}')
+
+    data = {
+        "model_state": model.state_dict(),
+        "input_size": input_size,
+        "output_size": output_size,
+        "hidden_size": hidden_size,
+        "all_words": all_words,
+        "tags": tags
+    }
+
+    FILE = "data.pth"
+    torch.save(data, FILE)
+
+    print(f'training complete. file saved to {FILE}')
+

@@ -1,10 +1,7 @@
 import nltk
-import json
 from nltk.stem.porter import PorterStemmer
 import numpy as np
-import torch
-import torch.nn as nn
-from torch.utils.data import Dataset, DataLoader
+
 
 stemmer = PorterStemmer()
 def tokenize(sentence):
