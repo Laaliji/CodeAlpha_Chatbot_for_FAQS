@@ -1,0 +1,4 @@
+Each time a dataset passes through an algorithm,
+it is said to have completed an epoch.
+Therefore, Epoch, in machine learning, refers to the one entire passing of training data through the algorithm.
+It's a hyperparameter that determines the process of training the machine learning model.
