@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -32,36 +32,47 @@ class _ChatbotPageState extends State<ChatbotPage> {
   final TextEditingController _controller = TextEditingController();
   String _response = ""; // Holds the response from the API
 
-  // Function to send the message to the Flask API
+
+  Future<void> testConnection() async {
+    const String apiUrl = 'http://localhost:5001/test';
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+      print("Test response status: ${response.statusCode}");
+      print("Test response body: ${response.body}");
+    } catch (e) {
+      print("Test connection error: $e");
+    }
+  }
+
   Future<void> sendMessage(String message) async {
-    const String apiUrl = 'http://127.0.0.1:5001/';  // Your Flask API URL
+    const String apiUrl = 'http://localhost:5001/';
     try {
       final response = await http.post(
         Uri.parse(apiUrl),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: json.encode({'message': message}),  // Send message to the API
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'message': message}),
       );
 
+      print("Response status: ${response.statusCode}");
+      print("Response body: ${response.body}");
+
       if (response.statusCode == 200) {
-        // Get the response from the chatbot
         final jsonResponse = json.decode(response.body);
         setState(() {
           _response = jsonResponse['response'];
         });
       } else {
         setState(() {
-          _response = "Error: Unable to connect to the server.";
+          _response = "Error: Server responded with status ${response.statusCode}";
         });
       }
     } catch (e) {
+      print("Error details: $e");
       setState(() {
         _response = "Error: ${e.toString()}";
       });
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,8 +90,9 @@ class _ChatbotPageState extends State<ChatbotPage> {
                 suffixIcon: IconButton(
                   icon: Icon(Icons.send),
                   onPressed: () {
-                    sendMessage(_controller.text);  // Send the message
-                    _controller.clear();  // Clear input field
+                    print("Sending message: ${_controller.text}");
+                    sendMessage(_controller.text);
+                    _controller.clear();
                   },
                 ),
               ),
