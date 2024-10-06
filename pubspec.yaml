@@ -60,6 +60,9 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   fonts:
+    - family: UserFont
+      fonts:
+        - asset: fonts/AovelSansRounded-rdDL.ttf
     - family: MyFont
       fonts:
         - asset: fonts/Emulogic-zrEw.ttf
