@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        #chatbox {
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: 300px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+        }
+        .user-message {
+            color: blue;
+        }
+        .bot-message {
+            color: green;
+        }
+        input[type="text"] {
+            width: 80%;
+            padding: 10px;
+            margin-right: 5px;
+        }
+        input[type="submit"] {
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Chat with the Bot</h1>
+<div id="chatbox"></div>
+
+<input type="text" id="messageInput" placeholder="Type a message..." />
+<input type="submit" value="Send" onclick="sendMessage()" />
+
+<script>
+    async function sendMessage() {
+        const message = document.getElementById('messageInput').value;
+        if (!message) return;
+
+        // Append user message to chatbox
+        const chatbox = document.getElementById('chatbox');
+        const userMessage = document.createElement('p');
+        userMessage.className = 'user-message';
+        userMessage.textContent = 'You: ' + message;
+        chatbox.appendChild(userMessage);
+
+        // Clear input field
+        document.getElementById('messageInput').value = '';
+
+        // Send message to Flask backend
+        const response = await fetch('http://127.0.0.1:5001/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ message: message })
+        });
+
+        const data = await response.json();
+
+        // Append bot response to chatbox
+        const botMessage = document.createElement('p');
+        botMessage.className = 'bot-message';
+        botMessage.textContent = 'Bot: ' + data.response;
+        chatbox.appendChild(botMessage);
+
+        // Scroll to the bottom of the chatbox
+        chatbox.scrollTop = chatbox.scrollHeight;
+    }
+</script>
+
+</body>
+</html>

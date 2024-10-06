@@ -13,7 +13,7 @@ def ensure_nltk_resources():
         try:
             nltk.data.find(resource)
         except LookupError:
-            nltk.download(resource.split('/')[-1])  # Downloads the resource
+            nltk.download(resource.split('/')[-1])
 
 ensure_nltk_resources()
 
@@ -83,8 +83,8 @@ if __name__ == '__main__':
 
     for epoch in range(num_epochs):
         for (words, labels) in train_loader:
-            words = words.to(device).float()  # Ensure words are floats
-            labels = labels.to(device).long()  # Ensure labels are long integers
+            words = words.to(device).float()
+            labels = labels.to(device).long()
 
             # Forward pass
             outputs = model(words)
